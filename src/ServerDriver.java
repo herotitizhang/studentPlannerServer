@@ -22,7 +22,7 @@ public class ServerDriver {
 		while(true) {
 			try {
 				Socket client = serverSocket.accept();
-				threadExecutor.execute(new Service(client));
+				threadExecutor.execute(new Service(client, threadExecutor));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

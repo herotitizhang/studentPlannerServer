@@ -9,13 +9,10 @@ public class UserInfo implements Serializable {
 	String phoneNumber = null;
 	String emailAddress = null;
 	
-	public UserInfo(String username, String password) {
+	// these 3 fields are necessary
+	public UserInfo(String username, String password, String phoneNumber) {
 		this.username = username;
 		this.password = password;
-	}
-	
-	public UserInfo(String username, String password, String phoneNumber) {
-		this(username, password);
 		this.phoneNumber = phoneNumber;
 	}
 	
