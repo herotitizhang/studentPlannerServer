@@ -1,4 +1,4 @@
-package networkCommunication;
+package fileAccess;
 
 import java.io.Serializable;
 
@@ -9,18 +9,15 @@ public class UserInfo implements Serializable {
 	String phoneNumber = null;
 	String emailAddress = null;
 	
-	// these 3 fields are necessary
-	public UserInfo(String username, String password, String phoneNumber) {
+	boolean Authenticated = false;
+	String sentCode = null;
+	
+	// these 2 fields are necessary
+	public UserInfo(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.phoneNumber = phoneNumber;
 	}
-	
-	public UserInfo(String username, String password, String phoneNumber, String emailAddress) {
-		this(username, password, phoneNumber);
-		this.emailAddress = emailAddress;
-	}
-	
+		
 	public String getUsername() {
 		return username;
 	}
@@ -51,6 +48,22 @@ public class UserInfo implements Serializable {
 
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+
+	public boolean isAuthenticated() {
+		return Authenticated;
+	}
+
+	public void setAuthenticated(boolean authenticated) {
+		Authenticated = authenticated;
+	}
+
+	public String getSentCode() {
+		return sentCode;
+	}
+
+	public void setSentCode(String sentCode) {
+		this.sentCode = sentCode;
 	}
 	
 }

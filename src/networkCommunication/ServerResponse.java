@@ -6,9 +6,9 @@ import model.ScheduleI;
 
 public class ServerResponse implements Serializable {
 	
-	boolean accepted = false; 
-	String failureNotice = null;
-	ScheduleI schedule = null;
+	private boolean accepted = false; 
+	private String failureNotice = null;
+	private ScheduleI schedule = null;
 	
 	public boolean isAccepted() {
 		return accepted;

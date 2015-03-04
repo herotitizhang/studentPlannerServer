@@ -14,31 +14,36 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import model.ScheduleI;
+import fileAccess.SynchronizedDataCenter;
 
-public class IOSystem {
+public class ServerIOSystem {
 
+	public static final String FILENAME = "Database";
+	
 	/**
 	 * Load from the local drive 
-	 * @param fileName
+	 * @param FILENAME
 	 * @return
 	 */
-	public static ScheduleI loadFromDisk(String fileName) {
+	public static SynchronizedDataCenter loadDataCenter() {
+		// check if the file exists
+		if (! new File(FILENAME+".SAV").exists()) return null; 
+		
 		FileInputStream fileIn = null;
 		BufferedInputStream bufferedIn = null;
 		DataInputStream dataIn = null;
 		try {
-			fileIn = new FileInputStream(fileName+".SAV");
+			fileIn = new FileInputStream(FILENAME+".SAV");
 			bufferedIn = new BufferedInputStream(fileIn);
 			dataIn = new DataInputStream(bufferedIn);
 
-			File file = new File (fileName+".SAV");
+			File file = new File (FILENAME+".SAV");
 			byte[] toBeConverted = new byte[file.length() > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) file.length()];
 			dataIn.readFully(toBeConverted);
 			
 			Object obj = getObject(toBeConverted);
-			if (obj instanceof ScheduleI) { // TODO not sure if it can do type checking
-				return (ScheduleI) obj;
+			if (obj instanceof SynchronizedDataCenter) { // TODO not sure if it can do type checking
+				return (SynchronizedDataCenter) obj;
 			} else {
 				return null;
 			}
@@ -56,7 +61,7 @@ public class IOSystem {
 		
 		
 		} catch (FileNotFoundException e) {
-			System.out.println("The save file is not found!");
+			// not gonna happen
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -71,16 +76,16 @@ public class IOSystem {
 	
 	/**
 	 * Write to the local drive
-	 * @param schedule
-	 * @param fileName
+	 * @param dataCenter
+	 * @param FILENAME
 	 */
-	public static void writeToDisk(ScheduleI schedule, String fileName) {
+	public static void saveDataCenter(SynchronizedDataCenter dataCenter) {
 		FileOutputStream fileOut = null;
 		BufferedOutputStream bufferedOut = null;
 		try {
-			fileOut = new FileOutputStream(fileName+".SAV");
+			fileOut = new FileOutputStream(FILENAME+".SAV");
 			bufferedOut = new BufferedOutputStream(fileOut);
-			bufferedOut.write(getByteArray(schedule));
+			bufferedOut.write(getByteArray(dataCenter));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -89,25 +94,6 @@ public class IOSystem {
 //			closeCloseable(fileOut);
 			closeCloseable(bufferedOut); // TODO we need to close either fileOut or bufferedOut but not both (don't understand why)
 		}
-	}
-	
-	public static ScheduleI loadFromServer() {
-		
-		return null;
-	}
-
-	public static void writeToServer(ScheduleI schedule) {
-		
-	}
-	
-	// TODO not sure if it's the correct method header
-	public static void RequestAuthenticateCell() {
-		
-	}
-
-	// TODO not sure if it's the correct method header
-	public static String AuthentiateCell() {
-		return null;
 	}
 	
 	/**
