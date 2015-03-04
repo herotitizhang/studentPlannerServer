@@ -12,12 +12,15 @@ package networkCommunication;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
 import fileAccess.SynchronizedDataCenter;
 import fileAccess.UserInfo;
 import networkCommunication.ClientRequest;
 import networkCommunication.ClientRequest.RequestType;
+import utilities.EmailService;
 import utilities.ServerIOSystem;
 
 
@@ -124,7 +127,42 @@ public class ClientCommunicator implements Runnable {
 	}
 	
 	private void processRequestAuth(ClientRequest clientRequest) {
+		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null 
+				|| clientRequest.getPhoneNumber() == null) return;
+		
+		ServerResponse serverResponse = new ServerResponse();
+		
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+			serverResponse.setAccepted(false);
+			serverResponse.setFailureNotice("False credentials!");
+		} else {
+			serverResponse.setAccepted(true);
+		}
+		
+		try {
+			socket.getOutputStream().write(ServerIOSystem.getByteArray(serverResponse));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if (serverResponse.isAccepted()) {
+			// generate random code
+			StringBuilder sb = new StringBuilder();
+			Random r = new Random();
+			String alphabet = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			for (int i = 0; i < 5; i++) {
+				sb.append(alphabet.charAt(r.nextInt(alphabet.length())));
+			}
 
+			String sentCode = sb.toString();
+			synchronized(dataCenter.getUserList()) { // TODO may be make it a set method? 
+				dataCenter.getUserList().get(clientRequest.getUserName()).setSentCode(sentCode);
+				dataCenter.save();
+			}
+			EmailService.sendToPhone(clientRequest.getPhoneNumber(), "Student Planner Verification", sentCode.toString());
+		}
+		
+		
 	}
 	
 	private void processAuth(ClientRequest clientRequest) {

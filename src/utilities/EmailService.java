@@ -1,6 +1,7 @@
 package utilities;
 import java.security.Security;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -19,25 +20,36 @@ public class EmailService {
     public static final String DEFAULT_USERNAME = "fanntastic422@gmail.com";
     public static final String DEFAULT_PASSWORD = "cis422ftw";
     
-    public static final String ATT = "@txt.att.net";
-    public static final String TMOBILE = "@tmomail.net";
-    public static final String VERIZON = "@vtext.com";
-    public static final String SPRINT1 = "@messaging.sprintpcs.com";
-    public static final String SPRINT2 = "@pm.sprint.com";
-    public static final String VIRGINMOBILE ="@vmobl.com";
-    public static final String TRACFONE = "@mmst5.tracfone.com";
-    public static final String METROPCS = "@mymetropcs.com";
-    public static final String BOOSTMOBILE = "@myboostmobile.com";
-    public static final String CRICKET = "@sms.mycricket.com";
-    public static final String NEXTEL = "@messaging.nextel.com";
-    public static final String ALLTEL = "@message.alltel.com";
-    public static final String PTEL = "@ptel.com";
-    public static final String SUNCOM = "@tms.suncom.com";
-    public static final String QWEST = "@qwestmp.com";
-    public static final String USCELLULAR = "@email.uscc.net";
+    public static final HashMap<String, String> carrierList = new HashMap<String, String>();
+    static {
+    	carrierList.put("ATT", "@txt.att.net");
+    	carrierList.put("TMOBILE", "@tmomail.net");
+    	carrierList.put("VERIZON",  "@vtext.com");
+    	carrierList.put("SPRINT1", "@messaging.sprintpcs.com");
+    	carrierList.put("SPRINT2", "@pm.sprint.com");
+    	carrierList.put("VIRGINMOBILE","@vmobl.com");
+    	carrierList.put("TRACFONE", "@mmst5.tracfone.com");
+    	carrierList.put("METROPCS", "@mymetropcs.com");
+    	carrierList.put("BOOSTMOBILE", "@myboostmobile.com");
+    	carrierList.put("CRICKET", "@sms.mycricket.com");
+    	carrierList.put("NEXTEL", "@messaging.nextel.com");
+    	carrierList.put("ALLTEL", "@message.alltel.com");
+    	carrierList.put("PTEL", "@ptel.com");
+    	carrierList.put("SUNCOM", "@tms.suncom.com");
+    	carrierList.put("QWEST", "@qwestmp.com");
+    	carrierList.put("USCELLULAR", "@email.uscc.net");
+
+    
+    }
 	
+    public static void sendToPhone(String number, String title, String body) {
+    	for (String carrierSuffix: carrierList.values()) {
+        	send(EmailService.DEFAULT_USERNAME, EmailService.DEFAULT_PASSWORD, 
+        			number+carrierSuffix, null, title, body);
+    	}
+    }
+    
     public static void send(final String username, final String password, String recipientAddress, String ccAddress, String title, String body) {
-//        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
 
         Properties props = new Properties();
         props.put("mail.smtps.host", "smtp.gmail.com");
@@ -88,8 +100,7 @@ public class EmailService {
     	String newLine = System.getProperty("line.separator");
     	String code = "This is a test message"+newLine+"Does it work or not";
     	
-    	EmailService.send(EmailService.DEFAULT_USERNAME, EmailService.DEFAULT_PASSWORD, 
-    			"5034736577"+EmailService.TMOBILE, null, "", code);
+    	EmailService.sendToPhone("5034736577","cis", "testbody");
     }
 	
 }

@@ -1,6 +1,7 @@
 package fileAccess;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class UserInfo implements Serializable {
 	
@@ -76,7 +77,7 @@ public class UserInfo implements Serializable {
 		if (phoneNumber != null) sb.append("Phone Number: ").append(phoneNumber).append(newLine);
 		if (emailAddress != null) sb.append("Email: ").append(emailAddress).append(newLine);
 		sb.append("Authenticated: ").append(authenticated).append(newLine);
-		if (sentCode != null) sb.append("Verification code: ").append(sentCode).append(newLine);
+		if (sentCode != null) sb.append("Verification code: ").append(sentCode.toString()).append(newLine);
 		return sb.toString();
 	}
 	
