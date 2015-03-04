@@ -33,6 +33,14 @@ public class SynchronizedDataCenter implements Serializable{
 		
 	}
 	
+	public synchronized boolean checkCredential(String username, String password) {
+		
+		if (!userList.containsKey(username)) return false;
+		if (!userList.get(username).getPassword().equals(password)) return false;
+		return true;
+		
+	}
+	
 	public synchronized boolean removeUser(UserInfo userInfo) {
 		
 		// I don't think we need this method as of yet..

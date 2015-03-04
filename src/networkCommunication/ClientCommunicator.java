@@ -70,7 +70,10 @@ public class ClientCommunicator implements Runnable {
 		}
 	}
 
+	
+	// TODO encryption
 	private void processCreate(ClientRequest clientRequest) {
+		
 		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;
 		ServerResponse serverResponse = new ServerResponse();
 		
@@ -79,7 +82,7 @@ public class ClientCommunicator implements Runnable {
 			serverResponse.setAccepted(true);
 		} else {
 			serverResponse.setAccepted(false);
-			serverResponse.setFailureNotice("Couldn't add to user list");
+			serverResponse.setFailureNotice("Couldn't add to user list!");
 		}
 		
 		try {
@@ -90,8 +93,26 @@ public class ClientCommunicator implements Runnable {
 		
 	}
 	
+	// TODO encryption
 	private void processLogin(ClientRequest clientRequest) {
 
+		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;
+		ServerResponse serverResponse = new ServerResponse();
+		
+		if (dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+			serverResponse.setAccepted(true);
+		} else {
+			serverResponse.setAccepted(false);
+			serverResponse.setFailureNotice("False credentials!");
+		}
+		
+		try {
+			socket.getOutputStream().write(ServerIOSystem.getByteArray(serverResponse));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	private void processSave(ClientRequest clientRequest) {

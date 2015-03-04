@@ -29,12 +29,13 @@ public class ServerDriver {
 		try {
 			serverSocket = new ServerSocket(12345);
 			System.out.println("Server started!");
-			System.out.println(serverSocket.getLocalSocketAddress());
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
+		// for server admin
+		threadExecutor.execute(new ConsoleMonitor(dataCenter));
 		
 		while(true) {
 			try {

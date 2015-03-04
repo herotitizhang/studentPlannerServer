@@ -9,7 +9,7 @@ public class UserInfo implements Serializable {
 	String phoneNumber = null;
 	String emailAddress = null;
 	
-	boolean Authenticated = false;
+	boolean authenticated = false;
 	String sentCode = null;
 	
 	// these 2 fields are necessary
@@ -51,11 +51,11 @@ public class UserInfo implements Serializable {
 	}
 
 	public boolean isAuthenticated() {
-		return Authenticated;
+		return authenticated;
 	}
 
 	public void setAuthenticated(boolean authenticated) {
-		Authenticated = authenticated;
+		this.authenticated = authenticated;
 	}
 
 	public String getSentCode() {
@@ -64,6 +64,20 @@ public class UserInfo implements Serializable {
 
 	public void setSentCode(String sentCode) {
 		this.sentCode = sentCode;
+	}
+	
+	@Override
+	public String toString() {
+		String newLine = System.getProperty("line.separator");
+		StringBuilder sb = new StringBuilder();
+		sb.append("========================").append(newLine)
+		.append("Username: ").append(getUsername()).append(newLine)
+		.append("Password: ").append(getPassword()).append(newLine);
+		if (phoneNumber != null) sb.append("Phone Number: ").append(phoneNumber).append(newLine);
+		if (emailAddress != null) sb.append("Email: ").append(emailAddress).append(newLine);
+		sb.append("Authenticated: ").append(authenticated).append(newLine);
+		if (sentCode != null) sb.append("Verification code: ").append(sentCode).append(newLine);
+		return sb.toString();
 	}
 	
 }
