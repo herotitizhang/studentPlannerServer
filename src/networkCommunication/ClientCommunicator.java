@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutorService;
 
 import fileAccess.SynchronizedDataCenter;
 import fileAccess.UserInfo;
+import model.ScheduleI;
 import networkCommunication.ClientRequest;
 import networkCommunication.ClientRequest.RequestType;
 import utilities.EmailService;
@@ -115,14 +116,54 @@ public class ClientCommunicator implements Runnable {
 			e.printStackTrace();
 		}
 		
-		
 	}
 
 	private void processSave(ClientRequest clientRequest) {
 
+		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null
+				|| clientRequest.getSchedule() == null) return;
+		ServerResponse serverResponse = new ServerResponse();
+		
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+			serverResponse.setAccepted(false);
+			serverResponse.setFailureNotice("False credentials!");
+		} else {
+			serverResponse.setAccepted(true);
+			synchronized(dataCenter) { // TODO may be make it a set method? 
+				UserInfo userInfo = dataCenter.getUserList().get(clientRequest.getUserName());
+				userInfo.setSchedule(clientRequest.getSchedule());
+				dataCenter.save();
+			}
+		}
+		
+		try {
+			socket.getOutputStream().write(ServerIOSystem.getByteArray(serverResponse));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void processLoad(ClientRequest clientRequest) {
+		
+		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;
+
+		ServerResponse serverResponse = new ServerResponse();
+		
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+			serverResponse.setAccepted(false);
+			serverResponse.setFailureNotice("False credentials!");
+		} else {
+			serverResponse.setAccepted(true);
+			ScheduleI schedule = dataCenter.getUserList().get(clientRequest.getUserName()).getSchedule();
+			serverResponse.setSchedule(schedule);
+		}
+		
+		try {
+			socket.getOutputStream().write(ServerIOSystem.getByteArray(serverResponse));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 	

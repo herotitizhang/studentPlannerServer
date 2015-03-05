@@ -3,6 +3,8 @@ package fileAccess;
 import java.io.Serializable;
 import java.util.UUID;
 
+import model.ScheduleI;
+
 public class UserInfo implements Serializable {
 	
 	String username = null;
@@ -12,6 +14,8 @@ public class UserInfo implements Serializable {
 	
 	boolean authenticated = false;
 	String sentCode = null;
+	
+	ScheduleI schedule = null;
 	
 	// these 2 fields are necessary
 	public UserInfo(String username, String password) {
@@ -67,6 +71,14 @@ public class UserInfo implements Serializable {
 		this.sentCode = sentCode;
 	}
 	
+	public ScheduleI getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(ScheduleI schedule) {
+		this.schedule = schedule;
+	}
+	
 	@Override
 	public String toString() {
 		String newLine = System.getProperty("line.separator");
@@ -80,5 +92,5 @@ public class UserInfo implements Serializable {
 		if (sentCode != null) sb.append("Verification code: ").append(sentCode.toString()).append(newLine);
 		return sb.toString();
 	}
-	
+
 }
