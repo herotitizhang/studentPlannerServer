@@ -41,6 +41,15 @@ public class SynchronizedDataCenter implements Serializable{
 		
 	}
 	
+	// check if the authenticate code matches the one stored in the userInfo
+	public synchronized boolean checkAuthenCode(String username, String authCode) {
+		
+		if (!userList.containsKey(username)) return false;
+		if (!userList.get(username).getSentCode().equals(authCode)) return false;
+		return true;
+		
+	}
+	
 	public synchronized boolean removeUser(UserInfo userInfo) {
 		
 		// I don't think we need this method as of yet..

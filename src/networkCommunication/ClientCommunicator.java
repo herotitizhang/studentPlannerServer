@@ -145,6 +145,8 @@ public class ClientCommunicator implements Runnable {
 			e.printStackTrace();
 		}
 		
+		// send the authentication code.
+		// do it after server sends the response so that there is less delay.
 		if (serverResponse.isAccepted()) {
 			// generate random code
 			StringBuilder sb = new StringBuilder();
@@ -154,23 +156,57 @@ public class ClientCommunicator implements Runnable {
 				sb.append(alphabet.charAt(r.nextInt(alphabet.length())));
 			}
 
+			// set phone number and authentication code
 			String sentCode = sb.toString();
-			synchronized(dataCenter.getUserList()) { // TODO may be make it a set method? 
+			synchronized(dataCenter) { // TODO may be make it a set method? 
+				dataCenter.getUserList().get(clientRequest.getUserName()).setAuthenticated(false);
+				// although the server saved the phone number, it can't be used unless the user is authenticated.
+				dataCenter.getUserList().get(clientRequest.getUserName()).setPhoneNumber(clientRequest.getPhoneNumber());
 				dataCenter.getUserList().get(clientRequest.getUserName()).setSentCode(sentCode);
 				dataCenter.save();
 			}
 			EmailService.sendToPhone(clientRequest.getPhoneNumber(), "Student Planner Verification", sentCode.toString());
+			
+			
 		}
-		
 		
 	}
 	
 	private void processAuth(ClientRequest clientRequest) {
-
+		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null 
+				|| clientRequest.getAuthenCode() == null) return;
+		
+		ServerResponse serverResponse = new ServerResponse();
+		
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+			serverResponse.setAccepted(false);
+			serverResponse.setFailureNotice("False credentials!");
+		} else if (!dataCenter.checkAuthenCode(clientRequest.getUserName(), clientRequest.getAuthenCode())) {
+			serverResponse.setAccepted(false);
+			serverResponse.setFailureNotice("The authentication code does not match!");
+		} else {
+			serverResponse.setAccepted(true);
+			
+			// the reason we lock the entire data center instead of just the hashmap is 
+			// becasue of the save method call. what if one thread is saving something 
+			// being processed by another thread? 
+			synchronized(dataCenter) { // TODO may be make it a set method? 
+				dataCenter.getUserList().get(clientRequest.getUserName()).setAuthenticated(true);
+				dataCenter.save();
+			}
+			
+		}
+		
+		try {
+			socket.getOutputStream().write(ServerIOSystem.getByteArray(serverResponse));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void processAlert(ClientRequest clientRequest) {
-
+//		if (/* cell phone not authenticated, give false info*/) 
 	}
 	
 }
