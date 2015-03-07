@@ -3,12 +3,14 @@ package fileAccess;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import model.CategoryI;
+import model.EventI;
 import utilities.ServerIOSystem;
 
 
 public class SynchronizedDataCenter implements Serializable{
 	
-	private HashMap<String, UserInfo> userList;
+	private HashMap<String, UserInfo> userList; // key:username value:userinfo
 	private HashMap alertList;
 	
 	public SynchronizedDataCenter() {
@@ -30,23 +32,6 @@ public class SynchronizedDataCenter implements Serializable{
 		} else {
 			return false;
 		}
-		
-	}
-	
-	public synchronized boolean checkCredential(String username, String password) {
-		
-		if (!userList.containsKey(username)) return false;
-		if (!userList.get(username).getPassword().equals(password)) return false;
-		return true;
-		
-	}
-	
-	// check if the authenticate code matches the one stored in the userInfo
-	public synchronized boolean checkAuthenCode(String username, String authCode) {
-		
-		if (!userList.containsKey(username)) return false;
-		if (!userList.get(username).getSentCode().equals(authCode)) return false;
-		return true;
 		
 	}
 	
@@ -96,6 +81,76 @@ public class SynchronizedDataCenter implements Serializable{
 			return true;
 		}
 		
+	}
+
+	public synchronized boolean checkCredential(String username, String password) {
+		
+		if (!userList.containsKey(username)) return false;
+		if (!userList.get(username).getPassword().equals(password)) return false;
+		return true;
+		
+	}
+	
+	// check if the authenticate code matches the one stored in the userInfo
+	public synchronized boolean checkAuthenCode(String username, String authCode) {
+		
+		if (!userList.containsKey(username)) return false;
+		if (!userList.get(username).getSentCode().equals(authCode)) return false;
+		return true;
+		
+	}
+	
+	// check if the user has been authenticated
+	public synchronized boolean checkAuthenticated(String username) {
+		
+		if (!userList.containsKey(username)) return false;
+		if (!userList.get(username).isAuthenticated()) return false;
+		return true;
+		
+	}
+	
+	// check if the user has been authenticated
+	public synchronized boolean checkEventExists(String username, String categoryName, String eventName) {
+
+		// no such user
+		if (!userList.containsKey(username)) return false;
+		
+		// the category does not exist
+		CategoryI ctgr = userList.get(username).getSchedule().getCategoriesMap().get(categoryName);
+		if (ctgr == null) return false;
+		
+		for (EventI event: ctgr.getAllEvents()) {
+			if (event.getName().equals(eventName)) {
+				return true;
+			}
+		}
+		
+		return false;
+
+	}
+	
+	// check if an event has its alert turned on
+	public synchronized boolean checkEventHasAlert(String username, String categoryName, String eventName) {
+
+		// no such user
+		if (!userList.containsKey(username)) return false;
+		
+		// the category does not exist
+		CategoryI ctgr = userList.get(username).getSchedule().getCategoriesMap().get(categoryName);
+		if (ctgr == null) return false;
+		
+		for (EventI event: ctgr.getAllEvents()) {
+			if (event.getName().equals(eventName)) {
+				if (event.hasAlert()) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+		
+		return false;
+
 	}
 
 	public synchronized HashMap<String, UserInfo> getUserList() {

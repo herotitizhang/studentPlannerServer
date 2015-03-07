@@ -218,12 +218,10 @@ public class ClientCommunicator implements Runnable {
 				|| clientRequest.getAuthenCode() == null) return;
 		
 		ServerResponse serverResponse = new ServerResponse();
-		
+		serverResponse.setAccepted(false);
 		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
-			serverResponse.setAccepted(false);
 			serverResponse.setFailureNotice("False credentials!");
 		} else if (!dataCenter.checkAuthenCode(clientRequest.getUserName(), clientRequest.getAuthenCode())) {
-			serverResponse.setAccepted(false);
 			serverResponse.setFailureNotice("The authentication code does not match!");
 		} else {
 			serverResponse.setAccepted(true);
@@ -247,7 +245,31 @@ public class ClientCommunicator implements Runnable {
 	}
 
 	private void processAlert(ClientRequest clientRequest) {
-//		if (/* cell phone not authenticated, give false info*/) 
+		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null 
+				|| clientRequest.getCategoryName() == null || clientRequest.getEventName() == null) return;
+		
+		ServerResponse serverResponse = new ServerResponse();
+		serverResponse.setAccepted(false);
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+			serverResponse.setFailureNotice("False credentials!");
+		} else if (!dataCenter.checkAuthenticated(clientRequest.getUserName())) {
+			serverResponse.setFailureNotice("The user has not authenticated the phone number!");
+		} else if (!dataCenter.checkEventExists(clientRequest.getUserName(), clientRequest.getCategoryName(), clientRequest.getEventName())) {
+			serverResponse.setFailureNotice("The event does not exist on the server! If you have added a new event locally, please save your schedule.");
+		} else if (!dataCenter.checkEventHasAlert(clientRequest.getUserName(), clientRequest.getCategoryName(), clientRequest.getEventName())) {
+			serverResponse.setFailureNotice("The's alert is not turned on! Please do so and save your schedule first.");
+		} else {
+			serverResponse.setAccepted(true);
+			
+			//TODO make new thread send alert
+		}
+
+		try {
+			socket.getOutputStream().write(ServerIOSystem.getByteArray(serverResponse));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
