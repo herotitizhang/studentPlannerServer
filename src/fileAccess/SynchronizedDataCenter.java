@@ -20,9 +20,7 @@ public class SynchronizedDataCenter implements Serializable{
 		if (! load()) {
 			userList = new HashMap<String, UserInfo>();
 			alertList = new HashMap<String, Alert>();
-		} else {
-			// TODO starts threads to run alerts
-		}
+		} 
 
 	}
 
@@ -119,22 +117,4 @@ public class SynchronizedDataCenter implements Serializable{
 		return alertList;
 	}
 	
-	
-	
-	/*
-	 * TODO
-	 * 
-	 * save to database
-	 * 
-	 * load from databse
-	 * 
-	 * add/delete to userlist
-	 * 
-	 * add/delete to alertlist
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 }

@@ -92,7 +92,7 @@ public class ServerIOSystem {
 			e.printStackTrace();
 		} finally {
 //			closeCloseable(fileOut);
-			closeCloseable(bufferedOut); // TODO we need to close either fileOut or bufferedOut but not both (don't understand why)
+			closeCloseable(bufferedOut); // we need to close either fileOut or bufferedOut but not both (don't understand why)
 		}
 	}
 	
