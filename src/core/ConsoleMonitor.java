@@ -26,7 +26,10 @@ public class ConsoleMonitor implements Runnable {
 				    System.out.println(it.next()); 
 				}
 			} else if (userInput.equals("list_alerts")) {
-				
+				Iterator<UserInfo> it = dataCenter.getAlertList().values().iterator(); 
+				while (it.hasNext()) {
+				    System.out.println(it.next()); 
+				}
 			}
 		}
 		

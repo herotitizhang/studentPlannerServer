@@ -2,8 +2,6 @@ package alertSystem;
 
 import java.util.GregorianCalendar;
 
-import model.Event;
-
 public class Alert {
 
 	String alertTitle = null;

@@ -20,7 +20,6 @@ import alertSystem.Alert;
 import alertSystem.AlertTask;
 import fileAccess.SynchronizedDataCenter;
 import fileAccess.UserInfo;
-import model.ScheduleI;
 import networkCommunication.ClientRequest;
 import networkCommunication.ClientRequest.RequestType;
 import utilities.EmailService;
@@ -133,7 +132,7 @@ public class ClientCommunicator implements Runnable {
 			serverResponse.setAccepted(true);
 			synchronized(dataCenter) { // TODO may be make it a set method? 
 				UserInfo userInfo = dataCenter.getUserList().get(clientRequest.getUserName());
-//				TODO userInfo.setSchedule(clientRequest.getSchedule());
+				userInfo.setSchedule(clientRequest.getSchedule());
 				dataCenter.save();
 			}
 		}
@@ -157,7 +156,7 @@ public class ClientCommunicator implements Runnable {
 			serverResponse.setFailureNotice("False credentials!");
 		} else {
 			serverResponse.setAccepted(true);
-			ScheduleI schedule = dataCenter.getUserList().get(clientRequest.getUserName()).getSchedule();
+			byte[] schedule = dataCenter.getUserList().get(clientRequest.getUserName()).getSchedule();
 			serverResponse.setSchedule(schedule);
 		}
 		

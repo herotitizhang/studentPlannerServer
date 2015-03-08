@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 
-import core.ConsoleMonitor;
 import alertSystem.Alert;
 import alertSystem.AlertTask;
-import model.CategoryI;
-import model.EventI;
 import utilities.ServerIOSystem;
 
 
