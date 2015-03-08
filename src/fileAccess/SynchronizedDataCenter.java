@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutorService;
 
 import alertSystem.Alert;
 import alertSystem.AlertTask;
-import utilities.ServerIOSystem;
 
 
 public class SynchronizedDataCenter implements Serializable{

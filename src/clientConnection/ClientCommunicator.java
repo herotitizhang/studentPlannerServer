@@ -1,4 +1,4 @@
-package networkCommunication;
+package clientConnection;
 /**
  * This handles all client communications after the initial connection 
  * request is made. It's responsible for passing information to and from 
@@ -15,14 +15,14 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
+import clientConnection.ClientRequest;
+import clientConnection.ClientRequest.RequestType;
 import alertSystem.Alert;
 import alertSystem.AlertTask;
+import alertSystem.EmailService;
+import fileAccess.ServerIOSystem;
 import fileAccess.SynchronizedDataCenter;
 import fileAccess.UserInfo;
-import networkCommunication.ClientRequest;
-import networkCommunication.ClientRequest.RequestType;
-import utilities.EmailService;
-import utilities.ServerIOSystem;
 
 
 public class ClientCommunicator implements Runnable {

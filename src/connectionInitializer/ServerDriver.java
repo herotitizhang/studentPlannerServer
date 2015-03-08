@@ -1,4 +1,4 @@
-package core;
+package connectionInitializer;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -6,9 +6,9 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import clientConnection.ClientCommunicator;
 import alertSystem.Alert;
 import alertSystem.AlertTask;
-import networkCommunication.ClientCommunicator;
 import fileAccess.SynchronizedDataCenter;
 
 /**

@@ -1,4 +1,4 @@
-package networkCommunication;
+package clientConnection;
 
 import java.io.Serializable;
 import java.util.GregorianCalendar;

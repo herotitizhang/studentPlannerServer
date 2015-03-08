@@ -4,8 +4,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import utilities.EmailService;
-
 public class AlertTask implements Runnable{
 	
 	Alert alert = null;
