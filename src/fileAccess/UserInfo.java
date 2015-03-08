@@ -15,7 +15,7 @@ public class UserInfo implements Serializable {
 	boolean authenticated = false;
 	String sentCode = null;
 	
-	ScheduleI schedule = null;
+	ScheduleI schedule = null; // TODO
 	
 	// these 2 fields are necessary
 	public UserInfo(String username, String password) {

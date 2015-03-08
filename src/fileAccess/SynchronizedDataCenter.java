@@ -2,7 +2,11 @@ package fileAccess;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
 
+import core.ConsoleMonitor;
+import alertSystem.Alert;
+import alertSystem.AlertTask;
 import model.CategoryI;
 import model.EventI;
 import utilities.ServerIOSystem;
@@ -11,16 +15,25 @@ import utilities.ServerIOSystem;
 public class SynchronizedDataCenter implements Serializable{
 	
 	private HashMap<String, UserInfo> userList; // key:username value:userinfo
-	private HashMap alertList;
+	private HashMap<String, Alert> alertList; // key:alertname value:alert
 	
 	public SynchronizedDataCenter() {
 		// first try to load. if there is no saved data (first time), 
 		// then initialize the 2 lists
 		if (! load()) {
 			userList = new HashMap<String, UserInfo>();
-			alertList = new HashMap();
+			alertList = new HashMap<String, Alert>();
+		} else {
+			// TODO starts threads to run alerts
 		}
 
+	}
+	
+	// should be called upon initialization
+	public synchronized void startAlerts(ExecutorService threadExecutor) {
+		for (Alert alert: alertList.values()) {
+			threadExecutor.execute(new AlertTask(alert));
+		}
 	}
 	
 	public synchronized boolean addUser(UserInfo userInfo) {
@@ -42,16 +55,15 @@ public class SynchronizedDataCenter implements Serializable{
 		
 	}
 	
-	public synchronized boolean addAlert(/* alert */) {
-		
-//		if (!userList.containsKey(userInfo.getUsername())) {
-//			userList.put(userInfo.getUsername(), userInfo);
-//			save();
-//			return true;
-//		} else {
-//			return false;
-//		}
-		return false;
+	/**
+	 * returns an old value if there is any. otherwise, returns null
+	 * @param alert
+	 * @return
+	 */
+	public synchronized Alert addAlert(Alert alert) {
+		Alert previousAlert = alertList.put(alert.getAlertTitle(), alert); 
+		save();
+		return previousAlert; 
 		
 	}
 	
@@ -107,50 +119,6 @@ public class SynchronizedDataCenter implements Serializable{
 		if (!userList.get(username).isAuthenticated()) return false;
 		return true;
 		
-	}
-	
-	// check if the user has been authenticated
-	public synchronized boolean checkEventExists(String username, String categoryName, String eventName) {
-
-		// no such user
-		if (!userList.containsKey(username)) return false;
-		
-		// the category does not exist
-		CategoryI ctgr = userList.get(username).getSchedule().getCategoriesMap().get(categoryName);
-		if (ctgr == null) return false;
-		
-		for (EventI event: ctgr.getAllEvents()) {
-			if (event.getName().equals(eventName)) {
-				return true;
-			}
-		}
-		
-		return false;
-
-	}
-	
-	// check if an event has its alert turned on
-	public synchronized boolean checkEventHasAlert(String username, String categoryName, String eventName) {
-
-		// no such user
-		if (!userList.containsKey(username)) return false;
-		
-		// the category does not exist
-		CategoryI ctgr = userList.get(username).getSchedule().getCategoriesMap().get(categoryName);
-		if (ctgr == null) return false;
-		
-		for (EventI event: ctgr.getAllEvents()) {
-			if (event.getName().equals(eventName)) {
-				if (event.hasAlert()) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		}
-		
-		return false;
-
 	}
 
 	public synchronized HashMap<String, UserInfo> getUserList() {

@@ -37,6 +37,9 @@ public class ServerDriver {
 		// for server admin
 		threadExecutor.execute(new ConsoleMonitor(dataCenter));
 		
+		// for run alert tasks
+		dataCenter.startAlerts(threadExecutor);
+		
 		while(true) {
 			try {
 				Socket client = serverSocket.accept();

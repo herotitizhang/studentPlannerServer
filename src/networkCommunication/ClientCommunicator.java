@@ -16,6 +16,8 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 
+import alertSystem.Alert;
+import alertSystem.AlertTask;
 import fileAccess.SynchronizedDataCenter;
 import fileAccess.UserInfo;
 import model.ScheduleI;
@@ -131,7 +133,7 @@ public class ClientCommunicator implements Runnable {
 			serverResponse.setAccepted(true);
 			synchronized(dataCenter) { // TODO may be make it a set method? 
 				UserInfo userInfo = dataCenter.getUserList().get(clientRequest.getUserName());
-				userInfo.setSchedule(clientRequest.getSchedule());
+//				TODO userInfo.setSchedule(clientRequest.getSchedule());
 				dataCenter.save();
 			}
 		}
@@ -246,7 +248,8 @@ public class ClientCommunicator implements Runnable {
 
 	private void processAlert(ClientRequest clientRequest) {
 		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null 
-				|| clientRequest.getCategoryName() == null || clientRequest.getEventName() == null) return;
+				|| clientRequest.getAlertTitle() == null || clientRequest.getAlertText() == null
+				|| clientRequest.getAlertTime() == null || clientRequest.getRepeat() == null) return;
 		
 		ServerResponse serverResponse = new ServerResponse();
 		serverResponse.setAccepted(false);
@@ -254,14 +257,13 @@ public class ClientCommunicator implements Runnable {
 			serverResponse.setFailureNotice("False credentials!");
 		} else if (!dataCenter.checkAuthenticated(clientRequest.getUserName())) {
 			serverResponse.setFailureNotice("The user has not authenticated the phone number!");
-		} else if (!dataCenter.checkEventExists(clientRequest.getUserName(), clientRequest.getCategoryName(), clientRequest.getEventName())) {
-			serverResponse.setFailureNotice("The event does not exist on the server! If you have added a new event locally, please save your schedule.");
-		} else if (!dataCenter.checkEventHasAlert(clientRequest.getUserName(), clientRequest.getCategoryName(), clientRequest.getEventName())) {
-			serverResponse.setFailureNotice("The's alert is not turned on! Please do so and save your schedule first.");
 		} else {
+			String phoneNumber = dataCenter.getUserList().get(clientRequest.getUserName()).getPhoneNumber();
+			Alert alert = new Alert(clientRequest.getAlertTitle(), clientRequest.getAlertText(),
+					clientRequest.getRepeat(), phoneNumber, clientRequest.getAlertTime());
+			dataCenter.addAlert(alert);
 			serverResponse.setAccepted(true);
-			
-			//TODO make new thread send alert
+			executorService.execute(new AlertTask(alert));
 		}
 
 		try {
