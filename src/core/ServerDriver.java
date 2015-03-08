@@ -6,6 +6,8 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import alertSystem.Alert;
+import alertSystem.AlertTask;
 import networkCommunication.ClientCommunicator;
 import fileAccess.SynchronizedDataCenter;
 
@@ -38,7 +40,9 @@ public class ServerDriver {
 		threadExecutor.execute(new ConsoleMonitor(dataCenter));
 		
 		// for run alert tasks
-		dataCenter.startAlerts(threadExecutor);
+		for (Alert alert: dataCenter.getAlertList().values()) {
+			threadExecutor.execute(new AlertTask(alert));
+		}
 		
 		while(true) {
 			try {

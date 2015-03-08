@@ -1,8 +1,10 @@
 package alertSystem;
 
+import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.GregorianCalendar;
 
-public class Alert {
+public class Alert implements Serializable{
 
 	String alertTitle = null;
 	String alertText = null;
@@ -57,6 +59,22 @@ public class Alert {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	
+	@Override
+	public String toString(){
+		  DateFormat formatter = DateFormat.getInstance(); 
+
+		  StringBuilder sb = new StringBuilder();
+		  String newLine = System.getProperty("line.separator");
+		  sb.append("===================").append(newLine)
+		  .append("Alert title: ").append(this.alertTitle).append(newLine)
+		  .append("Alert text: ").append(this.alertText).append(newLine)
+		  .append("Alert time: ").append(formatter.format(alertTime.getTime())).append(newLine)
+		  .append("Repeating: ").append(repeat.toString()).append(newLine)
+		  .append("Phone number: ").append(phoneNumber).append(newLine);
+
+		  return sb.toString();
 	}
 
 }

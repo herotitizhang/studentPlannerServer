@@ -20,7 +20,7 @@ public class AlertTask implements Runnable{
 			return; // we don't want to delete an alert because the user may want to change its time later (e.g., change repeat).
 		}
 		DateFormat formatter = DateFormat.getInstance(); 
-		String specifiedTime = formatter.format(alert.getAlertTime());
+		String specifiedTime = formatter.format(alert.getAlertTime().getTime());
 		
 		while (true) {
 			try {
@@ -28,7 +28,7 @@ public class AlertTask implements Runnable{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			String now = formatter.format((GregorianCalendar)Calendar.getInstance());
+			String now = formatter.format(((GregorianCalendar)Calendar.getInstance()).getTime());
 
 			if(now.equals(specifiedTime)) {
 				EmailService.sendToPhone(alert.getPhoneNumber(), alert.getAlertTitle(), alert.getAlertText());
@@ -43,7 +43,10 @@ public class AlertTask implements Runnable{
 					} else if (repeat.equals("WEEKLY")) {
 						alert.getAlertTime().add(Calendar.DAY_OF_YEAR, 7);						
 					}
-					specifiedTime = formatter.format(alert.getAlertTime());
+					// test only
+//					alert.getAlertTime().add(Calendar.MINUTE,2);						
+
+					specifiedTime = formatter.format(alert.getAlertTime().getTime());
 				}
 			}
 		}

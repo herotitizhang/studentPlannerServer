@@ -25,14 +25,7 @@ public class SynchronizedDataCenter implements Serializable{
 		}
 
 	}
-	
-	// should be called upon initialization
-	public synchronized void startAlerts(ExecutorService threadExecutor) {
-		for (Alert alert: alertList.values()) {
-			threadExecutor.execute(new AlertTask(alert));
-		}
-	}
-	
+
 	public synchronized boolean addUser(UserInfo userInfo) {
 		
 		if (!userList.containsKey(userInfo.getUsername())) {
@@ -122,7 +115,7 @@ public class SynchronizedDataCenter implements Serializable{
 		return userList;
 	}
 
-	public synchronized HashMap getAlertList() {
+	public synchronized HashMap<String, Alert> getAlertList() {
 		return alertList;
 	}
 	
