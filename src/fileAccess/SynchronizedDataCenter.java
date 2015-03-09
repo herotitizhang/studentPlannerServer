@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 
 import alertSystem.Alert;
-import alertSystem.AlertTask;
+import alertSystem.CheckAlertsTask;
 
 
 public class SynchronizedDataCenter implements Serializable{
@@ -54,10 +54,9 @@ public class SynchronizedDataCenter implements Serializable{
 		
 	}
 	
-	public synchronized boolean removeAlert(/* alert */) {
-		
-		// I don't think we need this method as of yet..
-		return false;
+	public synchronized Alert removeAlert(String alertTitle) {
+
+		return alertList.remove(alertTitle);
 		
 	}
 	

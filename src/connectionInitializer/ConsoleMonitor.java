@@ -19,6 +19,7 @@ public class ConsoleMonitor implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("Enter \"help\" to see a list of available commands");
 		while (true) {
 			String userInput = console.nextLine();
 			if (userInput.equals("list_users")) {
@@ -31,9 +32,20 @@ public class ConsoleMonitor implements Runnable {
 				while (it.hasNext()) {
 				    System.out.println(it.next()); 
 				}
+			} else if (userInput.equals("exit")) {
+				System.exit(0);
+			} else {
+				printHelp();
 			}
 		}
 		
+	}
+	
+	private void printHelp() {
+		System.out.println("list_users - lists all the users.");
+		System.out.println("list_alerts - lists all the alerts.");
+		System.out.println("exit/quit - exits the program.");
+		System.out.println("help - prints all commands.");
 	}
 	
 }

@@ -1,8 +1,10 @@
 package alertSystem;
 import java.security.Security;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -42,6 +44,21 @@ public class EmailService {
     
     }
 	
+    // create a new thread to send the text
+    public static void sendToPhone(String number, String title, String body, ExecutorService threadExecutor) {
+    	
+    	threadExecutor.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				System.out.println("sending");
+				sendToPhone(number, title, body);
+				System.out.println("sent");
+			}
+    		
+    	});
+    }
+    
     public static void sendToPhone(String number, String title, String body) {
     	for (String carrierSuffix: carrierList.values()) {
         	send(EmailService.DEFAULT_USERNAME, EmailService.DEFAULT_PASSWORD, 

@@ -1,4 +1,4 @@
-package clientConnection;
+package backendIO;
 /**
  * This handles all client communications after the initial connection 
  * request is made. It's responsible for passing information to and from 
@@ -15,10 +15,10 @@ import java.net.Socket;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
-import clientConnection.ClientRequest;
-import clientConnection.ClientRequest.RequestType;
+import backendIO.ClientRequest;
+import backendIO.ClientRequest.RequestType;
 import alertSystem.Alert;
-import alertSystem.AlertTask;
+import alertSystem.CheckAlertsTask;
 import alertSystem.EmailService;
 import fileAccess.ServerIOSystem;
 import fileAccess.SynchronizedDataCenter;
@@ -261,7 +261,6 @@ public class ClientCommunicator implements Runnable {
 					clientRequest.getRepeat(), phoneNumber, clientRequest.getAlertTime());
 			dataCenter.addAlert(alert);
 			serverResponse.setAccepted(true);
-			executorService.execute(new AlertTask(alert));
 		}
 
 		try {
