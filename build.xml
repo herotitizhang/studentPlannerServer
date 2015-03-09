@@ -29,7 +29,7 @@
 		<echo>Start generating the jar file...</echo>
 		<jar basedir="${dest}" jarfile="${output}/Server.jar">
 			<manifest>
-				<attribute name="Main-Class" value="core.ServerDriver"/>
+				<attribute name="Main-Class" value="connectionInitializer.ServerDriver"/>
 			</manifest>
 			
 			<!-- for including the external jar (3rd) -->
@@ -39,7 +39,7 @@
 	</target>
 
 	<target name="run" depends="build">
-		<java classname="core.ServerDriver" fork="yes" classpath="${output}/Server.jar"/>
+		<java classname="connectionInitializer.ServerDriver" fork="yes" classpath="${output}/Server.jar"/>
 	</target>
 
 	<!-- remove both jar file and class files -->
