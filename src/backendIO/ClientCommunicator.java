@@ -81,7 +81,7 @@ public class ClientCommunicator implements Runnable {
 		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;
 		ServerResponse serverResponse = new ServerResponse();
 		
-		UserInfo newUserInfo = new UserInfo(clientRequest.getUserName(), clientRequest.getPassword());
+		UserInfo newUserInfo = new UserInfo(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()));
 		if (dataCenter.addUser(newUserInfo) ) {
 			serverResponse.setAccepted(true);
 		} else {
@@ -103,11 +103,12 @@ public class ClientCommunicator implements Runnable {
 		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;
 		ServerResponse serverResponse = new ServerResponse();
 		
-		if (dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+		if (dataCenter.checkCredential(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()))) {
 			serverResponse.setAccepted(true);
 		} else {
 			serverResponse.setAccepted(false);
 			serverResponse.setFailureNotice("False credentials!");
+
 		}
 		
 		try {
@@ -124,9 +125,10 @@ public class ClientCommunicator implements Runnable {
 				|| clientRequest.getSchedule() == null) return;
 		ServerResponse serverResponse = new ServerResponse();
 		
-		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()))) {
 			serverResponse.setAccepted(false);
 			serverResponse.setFailureNotice("False credentials!");
+
 		} else {
 			serverResponse.setAccepted(true);
 			synchronized(dataCenter) { // TODO may be make it a set method? 
@@ -150,9 +152,10 @@ public class ClientCommunicator implements Runnable {
 
 		ServerResponse serverResponse = new ServerResponse();
 		
-		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()))) {
 			serverResponse.setAccepted(false);
 			serverResponse.setFailureNotice("False credentials!");
+
 		} else {
 			serverResponse.setAccepted(true);
 			byte[] schedule = dataCenter.getUserList().get(clientRequest.getUserName()).getSchedule();
@@ -173,9 +176,10 @@ public class ClientCommunicator implements Runnable {
 		
 		ServerResponse serverResponse = new ServerResponse();
 		
-		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()))) {
 			serverResponse.setAccepted(false);
 			serverResponse.setFailureNotice("False credentials!");
+
 		} else {
 			serverResponse.setAccepted(true);
 		}
@@ -219,8 +223,9 @@ public class ClientCommunicator implements Runnable {
 		
 		ServerResponse serverResponse = new ServerResponse();
 		serverResponse.setAccepted(false);
-		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()))) {
 			serverResponse.setFailureNotice("False credentials!");
+
 		} else if (!dataCenter.checkAuthenCode(clientRequest.getUserName(), clientRequest.getAuthenCode())) {
 			serverResponse.setFailureNotice("The authentication code does not match!");
 		} else {
@@ -251,7 +256,7 @@ public class ClientCommunicator implements Runnable {
 		
 		ServerResponse serverResponse = new ServerResponse();
 		serverResponse.setAccepted(false);
-		if (!dataCenter.checkCredential(clientRequest.getUserName(), clientRequest.getPassword())) {
+		if (!dataCenter.checkCredential(clientRequest.getUserName(), decryptPassword(clientRequest.getPassword()))) {
 			serverResponse.setFailureNotice("False credentials!");
 		} else if (!dataCenter.checkAuthenticated(clientRequest.getUserName())) {
 			serverResponse.setFailureNotice("The user has not authenticated the phone number!");
@@ -269,6 +274,22 @@ public class ClientCommunicator implements Runnable {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static String encryptPassword(String password) {
+		String encryptedPassword = "";
+		for (int i = 0; i < password.length(); i++) {
+			encryptedPassword += (char)(password.charAt(i)+1);
+		}
+		return encryptedPassword;
+	}
+	
+	public static String decryptPassword(String password) {
+		String decryptedPassword = "";
+		for (int i = 0; i < password.length(); i++) {
+			decryptedPassword += (char)(password.charAt(i)-1);
+		}
+		return decryptedPassword;
 	}
 	
 }
