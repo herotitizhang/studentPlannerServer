@@ -1,3 +1,8 @@
+/**
+ * UserInfo includes all the information of a registered user.
+ * Author: Tony Zhang
+ */
+
 package fileAccess;
 
 import java.io.Serializable;

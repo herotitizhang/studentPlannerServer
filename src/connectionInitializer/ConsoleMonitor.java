@@ -1,3 +1,10 @@
+/**
+ * ConsoleMonitor class allows a server admin to monitor the status of the server
+ * by typing in comments.
+ * 
+ * Author: Tony Zhang
+ */
+
 package connectionInitializer;
 
 import java.util.Iterator;

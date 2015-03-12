@@ -1,3 +1,12 @@
+/**
+ * This handles initial connection requests - importantly, it must NOT wait for 
+ * further feedback from client. Instead it immediately forks off a client 
+ * communication thread, and waits for further input. It is the implementation of
+ * Client Initialization thread.
+ * @author Tony Zhang
+ *
+ */
+
 package connectionInitializer;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -10,15 +19,6 @@ import backendIO.ClientCommunicator;
 import alertSystem.Alert;
 import alertSystem.CheckAlertsTask;
 import fileAccess.SynchronizedDataCenter;
-
-/**
- * This handles initial connection requests - importantly, it must NOT wait for 
- * further feedback from client. Instead it immediately forks off a client 
- * communication thread, and waits for further input. It is the implementation of
- * Client Initialization thread.
- * @author Tony Zhang
- *
- */
 
 public class ServerDriver {
 	

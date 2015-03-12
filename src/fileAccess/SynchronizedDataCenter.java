@@ -1,3 +1,12 @@
+/**
+ * SynchronizedDataCenter class includes all a user list and an alert list.
+ * It also provides methods to allow users to manage the two lists.
+ * The class is saved every time changes are made to either list; it is loaded
+ * when the server is launched.
+ * 
+ * Author: Tony Zhang
+ */
+
 package fileAccess;
 
 import java.io.Serializable;

@@ -1,6 +1,9 @@
+/**
+ * EmailService is a utility class used to send an email.
+ * Author: Tony Zhang
+ */
+
 package alertSystem;
-import java.security.Security;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Properties;
@@ -45,7 +48,7 @@ public class EmailService {
     }
 	
     // create a new thread to send the text
-    public static void sendToPhone(String number, String title, String body, ExecutorService threadExecutor) {
+    public static void sendToPhone(final String number, String title, String body, ExecutorService threadExecutor) {
     	
     	threadExecutor.execute(new Runnable() {
 
@@ -112,6 +115,7 @@ public class EmailService {
 		}
     }
     
+    /* For testing
     public static void main (String[] args) {
     	
     	String newLine = System.getProperty("line.separator");
@@ -119,5 +123,5 @@ public class EmailService {
     	
     	EmailService.sendToPhone("5034736577","cis", "testbody");
     }
-	
+	*/
 }

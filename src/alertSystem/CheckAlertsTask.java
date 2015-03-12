@@ -1,3 +1,8 @@
+/**
+ * CheckAlertsTask is a runnable that repeatedly check if it's time to send an alert.
+ * Author: Tony Zhang
+ */
+
 package alertSystem;
 
 import java.text.DateFormat;
@@ -74,33 +79,3 @@ public class CheckAlertsTask implements Runnable{
 }
 
 	
-	/*
-	
-		
-		
-		
-		// TODO Evernote
-		GregorianCalendar alert = new GregorianCalendar(2015, Calendar.MARCH, 7, 0, 47);
-		DateFormat formatter = DateFormat.getInstance(); 
-		System.out.println(formatter.format(now.getTime()));
-		System.out.println(formatter.format(alert.getTime()));
-
-		while (true) {
-			try {
-				Thread.sleep(60 * 1000); // check it every minute
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			GregorianCalendar now = (GregorianCalendar)Calendar.getInstance();
-
-			if(formatter.format(now.getTime()).equals(formatter.format(alert.getTime()))) {
-				System.out.println("Alert!!!");
-			}
-		}
-	
-	
-	
-	
-	
-	
-	 */

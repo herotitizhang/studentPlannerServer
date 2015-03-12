@@ -1,3 +1,7 @@
+/**
+ * ClientRequest is a container that includes what's sent from the client to the server.
+ * Author: Tony Zhang
+ */
 package backendIO;
 
 import java.io.Serializable;
@@ -130,7 +134,7 @@ public class ClientRequest implements Serializable {
 	
 
 	public enum RequestType {
-		CREATE, LOGIN, SAVE, LOAD, REQUEST_AUTH, AUTH, ALERT, CHECK_CONNECTION;
+		CREATE, LOGIN, SAVE, LOAD, REQUEST_AUTH, AUTH, ALERT;
 		// for the client side:
 		// CREATE: set username and password
 		// LOGIN: set username and password

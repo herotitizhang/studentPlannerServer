@@ -1,4 +1,3 @@
-package backendIO;
 /**
  * This handles all client communications after the initial connection 
  * request is made. It's responsible for passing information to and from 
@@ -8,6 +7,7 @@ package backendIO;
  * Author: Tony Zhang
  * 
  */
+package backendIO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,7 +80,7 @@ public class ClientCommunicator implements Runnable {
 	}
 
 	
-	// TODO encryption
+	
 	private void processCreate(ClientRequest clientRequest) {
 		
 		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;
@@ -102,7 +102,7 @@ public class ClientCommunicator implements Runnable {
 		
 	}
 	
-	// TODO encryption
+	
 	private void processLogin(ClientRequest clientRequest) {
 
 		if (clientRequest.getUserName() == null || clientRequest.getPassword() == null) return;

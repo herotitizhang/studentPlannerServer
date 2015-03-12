@@ -1,3 +1,7 @@
+/**
+ * The alert class includes all the information of an alert.
+ * Author: Tony Zhang
+ */
 package alertSystem;
 
 import java.io.Serializable;

@@ -1,3 +1,9 @@
+/**
+ * ServerIOSystem class provides some utility methods.
+ * Author: Tony Zhang
+ */
+
+
 package fileAccess;
 
 import java.io.BufferedInputStream;
