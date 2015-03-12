@@ -41,14 +41,19 @@ public class ClientCommunicator implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				if (socket.getInputStream().available() > 0){
+				if (socket.isConnected() && !socket.isClosed() && socket.getInputStream().available() > 0){
 					InputStream in = socket.getInputStream(); // get inputStream (content entered) of the socket
 					byte[] content = new byte[in.available()]; // initialize a byte array
 					in.read(content); // read bytes from inputStream, and put them into the byte array
 					ClientRequest clientRequest = (ClientRequest)ServerIOSystem.getObject(content);
 					processClientRequest(clientRequest);
-				}
-			} catch (IOException e) {
+					socket.close();
+					break; // close the thread
+				} 
+				Thread.sleep(10); // keep the server from dominating the resource
+			} catch (IOException e) {	
+				e.printStackTrace();
+			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

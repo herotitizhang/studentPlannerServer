@@ -130,7 +130,7 @@ public class ClientRequest implements Serializable {
 	
 
 	public enum RequestType {
-		CREATE, LOGIN, SAVE, LOAD, REQUEST_AUTH, AUTH, ALERT;
+		CREATE, LOGIN, SAVE, LOAD, REQUEST_AUTH, AUTH, ALERT, CHECK_CONNECTION;
 		// for the client side:
 		// CREATE: set username and password
 		// LOGIN: set username and password
