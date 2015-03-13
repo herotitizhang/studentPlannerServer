@@ -115,13 +115,13 @@ public class EmailService {
 		}
     }
     
-    /* For testing
+//    /* For testing
     public static void main (String[] args) {
     	
     	String newLine = System.getProperty("line.separator");
     	String code = "This is a test message"+newLine+"Does it work or not";
     	
-    	EmailService.sendToPhone("5034736577","cis", "testbody");
+    	EmailService.sendToPhone("5034736577","", "testbody");
     }
-	*/
+//	*/
 }

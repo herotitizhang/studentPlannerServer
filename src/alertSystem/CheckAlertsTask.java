@@ -56,7 +56,9 @@ public class CheckAlertsTask implements Runnable{
 		}
 
 		if(now.equals(specifiedTime)) {
-			EmailService.sendToPhone(alert.getPhoneNumber(), alert.getAlertTitle(), alert.getAlertText(), threadExecutor);
+			String[] strs = alert.getAlertTitle().split("\\.");
+			String title = strs[strs.length-1];
+			EmailService.sendToPhone(alert.getPhoneNumber(), "", title +" - " + alert.getAlertText(), threadExecutor);
 			String repeat = alert.getRepeat();
 			if (repeat.equals("NONE")) {
 				dataCenter.removeAlert(alert.getAlertTitle());
